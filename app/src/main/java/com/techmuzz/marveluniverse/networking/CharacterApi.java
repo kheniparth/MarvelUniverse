@@ -16,7 +16,7 @@ public class CharacterApi {
 
     }
 
-    private static CharacterService getInstance() {
+    public static CharacterService getInstance() {
         if (characterService != null) {
             return characterService;
         }

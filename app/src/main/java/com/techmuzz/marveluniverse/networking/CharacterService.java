@@ -1,5 +1,7 @@
 package com.techmuzz.marveluniverse.networking;
 
+import com.techmuzz.marveluniverse.models.Character;
+
 import java.util.List;
 
 import retrofit2.Call;
