@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Marvel Universe</string>
+    <string name="api_error_characters">Error loading Characters</string>
 </resources>
