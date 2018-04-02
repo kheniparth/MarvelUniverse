@@ -31,6 +31,7 @@ public class DetailsFragment extends Fragment {
     @BindView(R.id.character_description)
     TextView characterDescTextView;
     private Unbinder unbinder;
+    private SelectedCharacterViewModel selectedCharacterViewModel;
 
     @Nullable
     @Override
@@ -42,12 +43,18 @@ public class DetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        selectedCharacterViewModel = ViewModelProviders.of(getActivity())
+                .get(SelectedCharacterViewModel.class);
+        selectedCharacterViewModel.restoreFromBundle(savedInstanceState);
         displayCharacter();
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        selectedCharacterViewModel.saveToBundle(outState);
+    }
+
     private void displayCharacter() {
-        SelectedCharacterViewModel selectedCharacterViewModel = ViewModelProviders.of(getActivity())
-                .get(SelectedCharacterViewModel.class);
         selectedCharacterViewModel.getSelectedCharacter().observe(this, character -> {
             String imageUrl = character.getThumbnail().getPath() + "/detail." + character.getThumbnail().getExtension();
 

@@ -8,6 +8,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import static java.lang.System.currentTimeMillis;
@@ -21,9 +22,16 @@ public interface CharacterService {
     String hash = new HashGenerator().generateHash(ts, apikey, privatekey);
 
 
-    @GET("https://gateway.marvel.com:443/v1/public/characters")
+    @GET("/v1/public/characters")
     Call<MarvelResponse> getCharacters(@Query("apikey") String apikey,
                                        @Query("hash") String hash,
                                        @Query("ts") String ts
+    );
+
+    @GET("/v1/public/characters/{characterId}")
+    Call<MarvelResponse> getCharacter(@Path("characterId") String characterId,
+                                      @Query("apikey") String apikey,
+                                      @Query("hash") String hash,
+                                      @Query("ts") String ts
     );
 }
