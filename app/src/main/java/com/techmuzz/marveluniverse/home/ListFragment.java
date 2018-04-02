@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,9 +43,8 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 
-        listView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         listView.setAdapter(new CharacterListAdapter(viewModel, this));
-        listView.setLayoutManager(new LinearLayoutManager(getContext()));
+        listView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         observeViewModel();
     }
 
@@ -52,6 +52,8 @@ public class ListFragment extends Fragment {
         viewModel.getCharacters().observe(this, characters -> {
             if (characters != null) {
                 listView.setVisibility(View.VISIBLE);
+                errorTextView.setVisibility(View.GONE);
+                errorTextView.setText(null);
             }
         });
         viewModel.getError().observe(this, isError -> {

@@ -1,13 +1,16 @@
 package com.techmuzz.marveluniverse.home;
 
 import android.arch.lifecycle.LifecycleOwner;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.techmuzz.marveluniverse.R;
 import com.techmuzz.marveluniverse.models.Character;
 
@@ -36,7 +39,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     @Override
     public CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_characters_list_item, parent, false);
-        return new CharacterViewHolder(view);
+        return new CharacterViewHolder(view, parent.getContext());
     }
 
     @Override
@@ -56,16 +59,21 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
     static final class CharacterViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.character_id)
-        TextView characterIdTextView;
-        @BindView(R.id.character_name) TextView characterNameTextView;
-        CharacterViewHolder(View itemView) {
+        @BindView(R.id.character_image)
+        ImageView characterImageView;
+        @BindView(R.id.character_name)
+        TextView characterNameTextView;
+        Context context;
+
+        CharacterViewHolder(View itemView, Context context) {
             super(itemView);
+            this.context = context;
             ButterKnife.bind(this, itemView);
         }
 
         void bind(Character character) {
-            characterIdTextView.setText(String.valueOf(character.getId()));
+            String imageUrl = character.getThumbnail().getPath() + "/detail." + character.getThumbnail().getExtension();
+            Glide.with(context).load(imageUrl).into(characterImageView);
             characterNameTextView.setText(character.getName());
         }
     }

@@ -1,5 +1,6 @@
 package com.techmuzz.marveluniverse.models;
 
+import java.util.Iterator;
 import java.util.List;
 import com.squareup.moshi.Json;
 
@@ -49,6 +50,12 @@ public class Data {
     }
 
     public List<Character> getCharacters() {
+        for (Iterator<Character> it = characters.iterator(); it.hasNext(); ) {
+            Character character = it.next();
+            if (character.getThumbnail().getPath().toLowerCase().contains("image_not_available")) {
+                it.remove();
+            }
+        }
         return characters;
     }
 
