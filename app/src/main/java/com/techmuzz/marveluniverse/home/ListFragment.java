@@ -15,18 +15,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.techmuzz.marveluniverse.R;
+import com.techmuzz.marveluniverse.details.DetailsFragment;
+import com.techmuzz.marveluniverse.models.Character;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements CharacterSelectedListener{
 
     @BindView(R.id.recycler_view)
     RecyclerView listView;
     @BindView(R.id.tv_error)
     TextView errorTextView;
-    @BindView(R.id.loading_view) View loadingView;
+    @BindView(R.id.loading_view)
+    View loadingView;
 
     private Unbinder unbinder;
     private ListViewModel viewModel;
@@ -43,7 +46,7 @@ public class ListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         viewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 
-        listView.setAdapter(new CharacterListAdapter(viewModel, this));
+        listView.setAdapter(new CharacterListAdapter(viewModel, this, this));
         listView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         observeViewModel();
     }
@@ -52,8 +55,6 @@ public class ListFragment extends Fragment {
         viewModel.getCharacters().observe(this, characters -> {
             if (characters != null) {
                 listView.setVisibility(View.VISIBLE);
-                errorTextView.setVisibility(View.GONE);
-                errorTextView.setText(null);
             }
         });
         viewModel.getError().observe(this, isError -> {
@@ -82,5 +83,16 @@ public class ListFragment extends Fragment {
             unbinder.unbind();
             unbinder = null;
         }
+    }
+
+    @Override
+    public void onCharacterSlected(Character character) {
+        SelectedCharacterViewModel selectedCharacterViewModel = ViewModelProviders.of(getActivity())
+                .get(SelectedCharacterViewModel.class);
+        selectedCharacterViewModel.setSelectedCharacter(character);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.screen_container, new DetailsFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -23,8 +23,10 @@ import butterknife.ButterKnife;
 public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder> {
 
     private final List<Character> data = new ArrayList<>();
+    private final CharacterSelectedListener characterSelectedListener;
 
-    public CharacterListAdapter(ListViewModel viewModel, LifecycleOwner lifecycleOwner) {
+    public CharacterListAdapter(ListViewModel viewModel, LifecycleOwner lifecycleOwner, CharacterSelectedListener characterSelectedListener) {
+        this.characterSelectedListener = characterSelectedListener;
         viewModel.getCharacters().observe(lifecycleOwner, characters -> {
             data.clear();
             if (characters != null) {
@@ -39,7 +41,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     @Override
     public CharacterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_characters_list_item, parent, false);
-        return new CharacterViewHolder(view, parent.getContext());
+        return new CharacterViewHolder(view, characterSelectedListener);
     }
 
     @Override
@@ -64,14 +66,21 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         @BindView(R.id.character_name)
         TextView characterNameTextView;
         Context context;
+        private Character character;
 
-        CharacterViewHolder(View itemView, Context context) {
+        CharacterViewHolder(View itemView, CharacterSelectedListener characterSelectedListener) {
             super(itemView);
-            this.context = context;
+            this.context = itemView.getContext();
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(v -> {
+                if (character != null) {
+                    characterSelectedListener.onCharacterSlected(character);
+                }
+            });
         }
 
         void bind(Character character) {
+            this.character = character;
             String imageUrl = character.getThumbnail().getPath() + "/detail." + character.getThumbnail().getExtension();
             Glide.with(context).load(imageUrl).into(characterImageView);
             characterNameTextView.setText(character.getName());
