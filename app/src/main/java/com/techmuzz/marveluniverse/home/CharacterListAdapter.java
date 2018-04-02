@@ -31,8 +31,8 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             data.clear();
             if (characters != null) {
                 data.addAll(characters);
-                notifyDataSetChanged();
             }
+            notifyDataSetChanged();
         });
         setHasStableIds(true);
     }

@@ -4,7 +4,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.techmuzz.marveluniverse.models.Character;
 import com.techmuzz.marveluniverse.models.MarvelResponse;
