@@ -5,7 +5,10 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.techmuzz.marveluniverse.models.Character;
+import com.techmuzz.marveluniverse.models.Data;
+import com.techmuzz.marveluniverse.models.MarvelResponse;
 import com.techmuzz.marveluniverse.networking.CharacterApi;
+import com.techmuzz.marveluniverse.networking.CharacterService;
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ public class ListViewModel extends ViewModel {
     private final MutableLiveData<Boolean> characterLoadError = new MutableLiveData<>();
     private final MutableLiveData<Boolean> loading = new MutableLiveData<>();
 
-    private Call<List<Character>> characterCall;
+    private Call<MarvelResponse> dataCall;
 
     public ListViewModel() {
         fetchCharacters();
@@ -39,30 +42,33 @@ public class ListViewModel extends ViewModel {
 
     private void fetchCharacters() {
         loading.setValue(true);
-        characterCall = CharacterApi.getInstance().getCharacters();
-        characterCall.enqueue(new Callback<List<Character>>() {
+        dataCall = CharacterApi.getInstance().getCharacters(CharacterService.apikey,
+                                                            CharacterService.hash,
+                                                            CharacterService.ts
+        );
+        dataCall.enqueue(new Callback<MarvelResponse>() {
             @Override
-            public void onResponse(Call<List<Character>> call, Response<List<Character>> response) {
+            public void onResponse(Call<MarvelResponse> call, Response<MarvelResponse> response) {
                 characterLoadError.setValue(false);
-                characters.setValue(response.body());
+                characters.setValue(response.body().getData().getCharacters());
                 loading.setValue(false);
-                characterCall = null;
+                dataCall = null;
             }
 
             @Override
-            public void onFailure(Call<List<Character>> call, Throwable t) {
+            public void onFailure(Call<MarvelResponse> call, Throwable t) {
                 characterLoadError.setValue(true);
                 loading.setValue(false);
-                characterCall = null;
+                dataCall = null;
             }
         });
     }
 
     @Override
     protected void onCleared() {
-        if (characterCall != null) {
-            characterCall.cancel();
-            characterCall = null;
+        if (dataCall != null) {
+            dataCall.cancel();
+            dataCall = null;
         }
     }
 }

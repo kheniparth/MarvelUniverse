@@ -1,0 +1,59 @@
+package com.techmuzz.marveluniverse.models;
+
+import java.util.List;
+import com.squareup.moshi.Json;
+
+public class Data {
+
+    @Json(name = "offset")
+    private int offset;
+    @Json(name = "limit")
+    private int limit;
+    @Json(name = "total")
+    private int total;
+    @Json(name = "count")
+    private int count;
+    @Json(name = "results")
+    private List<Character> characters = null;
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
+    }
+
+    public int getLimit() {
+        return limit;
+    }
+
+    public void setLimit(int limit) {
+        this.limit = limit;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
+
+    public void setCharacters(List<Character> results) {
+        this.characters = characters;
+    }
+
+}

@@ -64,7 +64,7 @@ public class ListFragment extends Fragment {
                 errorTextView.setText(null);
             }
         });
-        viewModel.getError().observe(this, isLoading -> {
+        viewModel.getLoading().observe(this, isLoading -> {
             loadingView.setVisibility(isLoading ? View.VISIBLE : View.GONE);
             if (isLoading) {
                 errorTextView.setVisibility(View.GONE);
